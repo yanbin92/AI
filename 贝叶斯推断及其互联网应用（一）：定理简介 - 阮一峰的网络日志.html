@@ -1,0 +1,3236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0071)http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" id="sixapart-standard"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+<meta name="generator" content="Movable Type  5.2.2">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/styles.css" type="text/css">
+<link rel="start" href="http://www.ruanyifeng.com/blog/" title="Home">
+<link rel="alternate" type="application/atom+xml" title="Recent Entries" href="http://feeds.feedburner.com/ruanyifeng">
+<script src="https://hm.baidu.com/hm.js?f89e0235da0841927341497d774e7b15"></script><script async="" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/analytics.js"></script><script type="text/javascript" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/mt.js"></script>
+<!--
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="http://www.ruanyifeng.com/blog/2017/12/qiang-tang.html">
+<dc:title>北方的空地</dc:title>
+<dc:description>最近有一部电影《77天》，讲述一个探险者在荒原独自旅行的故事。...</dc:description>
+<dc:creator>阮一峰</dc:creator>
+<dc:date>2017-12-05T20:29:12+08:00</dc:date>
+<license rdf:resource="http://creativecommons.org/licenses/by-nc-nd/3.0/" />
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by-nc-nd/3.0/">
+</License>
+</rdf:RDF>
+-->
+
+
+    
+    <link rel="prev" href="http://www.ruanyifeng.com/blog/2011/08/the_quiet_mode_of_influence.html" title="影响力的静模式">
+    <link rel="next" href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_two.html" title="贝叶斯推断及其互联网应用（二）：过滤垃圾邮件">
+    
+    <title>贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志</title>
+<script src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bsStatic.js" type="text/javascript" charset="utf-8"></script><script src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/fingerprint2.min.js" type="text/javascript" charset="utf-8"></script><script src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bs-engine.js" type="text/javascript" charset="utf-8"></script><style type="text/css">a.bshareDiv,#bsPanel,#bsMorePanel,#bshareF{border:none;background:none;padding:0;margin:0;font:12px Helvetica,Calibri,Tahoma,Arial,宋体,sans-serif;line-height:14px;}#bsPanel div,#bsMorePanel div,#bshareF div{display:block;}.bsRlogo .bsPopupAwd,.bsRlogoSel .bsPopupAwd,.bsLogo .bsPopupAwd,.bsLogoSel .bsPopupAwd{line-height:16px !important;}a.bshareDiv div,#bsFloatTab div{*display:inline;zoom:1;display:inline-block;}a.bshareDiv img,a.bshareDiv div,a.bshareDiv span,a.bshareDiv a,#bshareF table,#bshareF tr,#bshareF td{text-decoration:none;background:none;margin:0;padding:0;border:none;line-height:1.2}a.bshareDiv span{display:inline;float:none;}div.buzzButton{cursor:pointer;font-weight:bold;}.buzzButton .shareCount a{color:#333}.bsStyle1 .shareCount a{color:#fff}span.bshareText{white-space:nowrap;}span.bshareText:hover{text-decoration:underline;}a.bshareDiv .bsPromo,div.bshare-custom .bsPromo{display:none;position:absolute;z-index:100;}a.bshareDiv .bsPromo.bsPromo1,div.bshare-custom .bsPromo.bsPromo1{width:51px;height:18px;top:-18px;left:0;line-height:16px;font-size:12px !important;font-weight:normal !important;color:#fff;text-align:center;background:url(//static.bshare.cn/frame/images/bshare_box_sprite2.gif) no-repeat 0 -606px;}div.bshare-custom .bsPromo.bsPromo2{background:url(//static.bshare.cn/frame/images/bshare_promo_sprite.gif) no-repeat;cursor:pointer;}</style><style type="text/css">.bsBox{display:none;z-index:100000001;font-size:12px;background:url(//static.bshare.cn/frame/images//background-opaque-dark.gif) !important;padding:6px !important;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;}.bsClose{_overflow:hidden;cursor:pointer;position:absolute;z-index:10000000;color:#666;font-weight:bold;font-family:Helvetica,Arial;font-size:14px;line-height:20px;}.bsTop{color:#666;background:#f2f2f2;height:24px;line-height:24px;border-bottom:1px solid #e8e8e8;}.bsTop span{float:left;}.bsFrameDiv,#bsMorePanel{border:none;background:#fff;}.bsReturn{float:right;*margin-right:20px;margin-right:36px;text-align:right;cursor:pointer;line-height:24px;color:#666;opacity:0.5;}#bsReturn:hover{text-decoration:underline;opacity:1;}</style><script src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bsMore.js" type="text/javascript" charset="utf-8"></script><script src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bshareS1.js" type="text/javascript" charset="utf-8"></script><script src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bshare_view" type="text/javascript" charset="utf-8"></script><style type="text/css">div.bsClear{clear:both;height:0;line-height:0;overflow:hidden;font-size:0;}.bsSearchDiv{padding:5px 15px;background-color:#fafafa;}.bFind-wrapper-top{background:#fff;border-color:#ccc #aaa #aaa #ccc;border-style:solid;border-width:1px;height:16px;padding:4px;margin:0;}.bFind-wrapper-top input{padding:0 !important;border:none !important;box-shadow:none !important;line-height:16px !important;}.bFind-placeholder{background:url("//static.bshare.cn/css/images/search-icon.gif") no-repeat;display:block;float:left;height:16px;width:16px;}.bFind{background:none;border:none;float:left;font-size:11px !important;height:16px !important;margin-left:3px;outline:none;padding:0;width:400px;}.bsPlatDiv{height:322px;background:#fff;overflow:auto;padding:0 15px;}#bsLogoList{display:block;list-style:none;overflow:hidden;margin:0;padding:0;}#bsLogoList li{float:left;display:inline-block;width:71px;text-align:center;font-size:12px;height:80px;margin:0 !important;}#bsLogoList .bsPlatIcon{cursor:pointer;display:block !important;text-align:center;}#bsLogoList .bsPlatImg{width:32px;height:32px;border:none !important;display:inline-block;}#bsLogoList .bsPlatImg:hover{-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;box-shadow:0 0 15px #a7a8ac;}#bsLogoList .bsPlatName{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;text-align:center;color:#333 !important;margin-top:2px;line-height:140%;*width:70px;}#bsLogoList .bsPromoM{text-align:center;}.bsFooterDiv{height:24px;line-height:24px;padding:0 15px;border-top:1px solid #e8e8e8;background:#f2f2f2;text-align:right;}a.bsLogoLink{color:#666;}.bsLogoLink:hover{text-decoration:underline;}.bsPromoM{background:url(//static.bshare.cn/frame/images//bshare_box_sprite2.gif) no-repeat top left;}.bsNew,.bsHot,.bsRec,.bsAwd{background-position:0 -552px;width:19px;margin:5px auto 1px;line-height:16px;height:18px;font-size:12px;color:#fff;overflow:hidden;}.bsNew{background-position:0 -570px;}.bsRec{width:30px;background-position:0 -588px;}.bsAwd{background:url(//static.bshare.cn/frame/images//promot/promote.gif) no-repeat;}</style><style type="text/css">a.bsSiteLink{text-decoration:none;color:#666;}a.bsSiteLink:hover{text-decoration:underline;}a.bshareDiv{overflow:hidden;height:16px;line-height:18px;font-size:14px;color:#333;padding-left:0;}a.bshareDiv:hover{text-decoration:none;}div.bsTitle{padding:0 8px;border-bottom:1px solid #e8e8e8;color:#666;background:#f2f2f2;text-align:left;}div.buzzButton{cursor:pointer;}div.bsRlogo,div.bsRlogoSel{width:68px;float:left;margin:0;padding:2px 0;}div.bsRlogo a,div.bsRlogoSel a{float:left;}div.bsLogo,div.bsLogoSel{float:left;width:111px;text-align:left;height:auto;padding:2px 4px;margin:2px 0;white-space:nowrap;overflow:hidden;}div.bsLogoSel,div.bsRlogoSel{border:1px solid #ddd;background:#f1f1f1;}div.bsLogo,div.bsRlogo{border:1px solid #fff;background:#fff;}div.bsLogo a,div.bsLogoSel a{display:block;height:16px;line-height:16px;padding:0 0 0 24px;text-decoration:none;float:left;overflow:hidden;}div.bsLogoSel a,div.bsRlogoSel a{color:#000;border:none;}div.bsLogo a,div.bsRlogo a{color:#666;border:none;}div.bsLogoLink{width:121px;overflow:hidden;background:#FFF;float:left;margin:3px 0;}#bsLogin{float:right;text-align:right;overflow:hidden;height:100%;}#bsPanel{position:absolute;z-index:100000000;font-size:12px;width:258px;background:url(//static.bshare.cn/frame/images/background-opaque-dark.png) !important;padding:6px !important;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;}div.bsClear{clear:both;height:0;line-height:0;font-size:0;overflow:hidden;}div.bsPopupAwd{background:url(//static.bshare.cn/frame/images//bshare_box_sprite2.gif) no-repeat top left;background-position:0 -624px;width:18px;padding-left:3px;text-align:center;float:left;margin-left: 2px;height:15px;font-size:12px;color:#fff;overflow:hidden;}div.bsRlogo .bsPopupAwd,div.bsRlogoSel .bsPopupAwd{float:left;margin:5px 0 0 -14px;}</style><style type="text/css">a.bsSiteLink{text-decoration:none;color:#666;}a.bsSiteLink:hover{text-decoration:underline;}a.bshareDiv{overflow:hidden;height:16px;line-height:18px;font-size:14px;color:#333;padding-left:0;}a.bshareDiv:hover{text-decoration:none;}div.bsTitle{padding:0 8px;border-bottom:1px solid #e8e8e8;color:#666;background:#f2f2f2;text-align:left;}div.buzzButton{cursor:pointer;}div.bsRlogo,div.bsRlogoSel{width:68px;float:left;margin:0;padding:2px 0;}div.bsRlogo a,div.bsRlogoSel a{float:left;}div.bsLogo,div.bsLogoSel{float:left;width:111px;text-align:left;height:auto;padding:2px 4px;margin:2px 0;white-space:nowrap;overflow:hidden;}div.bsLogoSel,div.bsRlogoSel{border:1px solid #ddd;background:#f1f1f1;}div.bsLogo,div.bsRlogo{border:1px solid #fff;background:#fff;}div.bsLogo a,div.bsLogoSel a{display:block;height:16px;line-height:16px;padding:0 0 0 24px;text-decoration:none;float:left;overflow:hidden;}div.bsLogoSel a,div.bsRlogoSel a{color:#000;border:none;}div.bsLogo a,div.bsRlogo a{color:#666;border:none;}div.bsLogoLink{width:121px;overflow:hidden;background:#FFF;float:left;margin:3px 0;}#bsLogin{float:right;text-align:right;overflow:hidden;height:100%;}#bsPanel{position:absolute;z-index:100000000;font-size:12px;width:258px;background:url(//static.bshare.cn/frame/images/background-opaque-dark.png) !important;padding:6px !important;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;}div.bsClear{clear:both;height:0;line-height:0;font-size:0;overflow:hidden;}div.bsPopupAwd{background:url(//static.bshare.cn/frame/images//bshare_box_sprite2.gif) no-repeat top left;background-position:0 -624px;width:18px;padding-left:3px;text-align:center;float:left;margin-left: 2px;height:15px;font-size:12px;color:#fff;overflow:hidden;}div.bsRlogo .bsPopupAwd,div.bsRlogoSel .bsPopupAwd{float:left;margin:5px 0 0 -14px;}</style></head>
+<body id="scrapbook" class="mt-entry-archive one-column">
+<script>
+if (/mobile/i.test(navigator.userAgent) || /android/i.test(navigator.userAgent)) document.body.classList.add('mobile');
+
+window.addEventListener('load', function(event) {
+  setTimeout(function () {
+    hab('#sup-post-2');
+    hab('#gd1-inner');
+  }, 1000);
+});
+</script>
+    <div id="container">
+        <div id="container-inner">
+
+            <div id="header">
+    <div id="header-inner">
+        <div id="header-content">
+
+
+            <div id="header-name">阮一峰的网络日志 <span id="site_location"> » <a href="http://www.ruanyifeng.com/blog/" accesskey="1">首页</a></span><span id="site_archive"> » <a href="http://www.ruanyifeng.com/blog/archives.html">档案</a></span>
+</div>
+
+<div id="google_search">
+<!-- SiteSearch Google -->
+<form action="http://www.ruanyifeng.com/blog/search.html" id="cse-search-box">
+      <div>
+        <input type="hidden" name="cx" value="016304377626642577906:b_e9skaywzq">
+    <input type="hidden" name="cof" value="FORID:11">
+    <input type="hidden" name="ie" value="UTF-8">
+        <input type="text" name="q" size="20" class="searchbox" id="sbi" value="">
+        <input type="image" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/top_search_submit.gif" class="searchbox_submit" value="" alt="搜索" name="sa">
+      </div>
+    </form>
+<!-- SiteSearch Google -->
+</div>
+<div id="feed_icon">
+<a href="http://www.ruanyifeng.com/feed.html" title="订阅Feed">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAUzSURBVHjavFdbbFRVFF3nPjoz7dTWTittaW0jUDRAUqaNojyqREnEQKgfUj9MqqAmhqRt/OCD4CuY+Kckoh+aiGKC+gMJbdHoRysJ8dkhhmJLNdDKtJU+6GMK87j3Hs85d2Z6HzNtMYWb3Dn3NWftvfba+5xNYDl+e6Fkj6yqb/oDRbWq14vlPBLRKCITkxf0ROLt+hNjp1PPSRK4kA3vF1dXNRcWlyA2OQU9eos9opAkAiKxD+XkKO6t15aRWO7J/MgmAZU8MEgexgZHMX518Dh72sYMmVKShnxWuWHdHtxKIDIYTgMuDzgfmSOIQkYMpdUF8OY92Hytt4/jvkg47czzU16iQovM3QFwmNck+Yyduu7D6NA0Z6JR4THntFs9V4tWQg6Ui3s6MwKDncsFTnXKLJhDSeUK3AgPtyhccDzmVs999buRt/1Vm4i0od+hX7+MRG87jPGB/w1u8FPj9xEw7McVrnYuOCvtpjTth3J/nTg99c8LRhKhr6D3dTB5R24bXFwbMXBsyZzeoXaycEpJ95TB09AGX/NpqLVNtw8urnVzLvHjFNxiFqRy2OOHuqUVnue+ACkoWzo4O6lGzTmuHq6nPvY2m9rVqjrIK2rMEKxqyG5NPAKt+wjo0LklgfNxJkZMA3KJvqRUk3z5UFY3QH14P0h+WUY79HPvgv7VuSg4ZRGY1YgZgqXmORccF17sy2ehnf9AeO085K2HQFbtXBScj0LcpgF2cN+WV+DZ/LJQu6gD4R7oV7pBJwbSgtMvfiPoVp56DySwxm7EtkMs1WdAB7qzggsDJKQYsHucSkOudrkiCPWR/fA2nYCn8SNIK4NptSMyAu3sAdDRkIsJdfth0LzSrODUoPNZ4KI9SxJI5UHk7D4GdQfz2us31c7CoHMjRkKuDPHseCMrONVhNcDJwMJpKFVvg9L4OaTiNWm1x789KCqkrXhVBiEz0WYCT2nAzQAD1/vaETv1GrRfP4Vx5cfMNcDPwvP0h0DhanPym7OIf/+O67vcJ1/PCJ4KgdzaUP6Wz+dU+5yIL6fV+PsHGAOdwlPpvvUOyeeAVGyCdqkDNB6DPjsBSrnndfOGevOh3RhGItxvA+fX1CtbGFhgYUFkFMZPR6F1HnClHq8HyubWtJexX06CRmdt33hrd7nA7SFY4qoGpnYuOKcRykPPgDCBcsHx9Iv+fNL2PueBehCWUfYQIIMGLOCcOmXDXsh1+yCt35tUPfvzGFuSvzvoinXOxqa02qOhM6733nVP2MAdaej2XN11DPKjLZCD+yBvahGCo7JfTKAN9UD7s8Oe9zUNIhz8fWI8DG2k38WCFdxugANcXrvTVd1IEbuv3Jour7Hzn7jLMBNfKs7R3i67gRVrbeCOEDhinmWhAatsqdquM2XzHZINhK2cqTjHr/XZdVJUbgN3MWAVXKbSyg9jesRW2xP9di+lwrL5ojM3m2H/kG9hwcIA37c71W6wJdW2J2S5nrjYbq/t1AHAhJsKQeyfPvf6IMJgghPJhFZ4x0KlfLFvt22du45Au/A1SOlGc0P672XXwhLtOcM0kTTEMMd0qkVmMNXxMd/tsedUjInr4SQDgOfeXMSiN0FCL5WHah4L1qqYXPJOJlttd+a5M+YpcG5poLYKQ5f+6JJ4r8bbJYP47hq4r7QAs9PjYNhHJd4o8l5taiwuOpa7AS4XKqI/5NjJbTnaWK92nLdLuhQAJayRNMiygXPBeQN+Qbvu0zDc3y+aUzhbkGR73sI7ljvUnndx2q3t+X8CDAD66FtrIL864AAAAABJRU5ErkJggg==" alt="" style="border: 0pt none;">
+</a></div>
+
+        </div>
+    </div>
+</div>
+
+
+
+            <div id="content">
+                <div id="content-inner">
+
+
+                    <div id="alpha">
+                        <div id="alpha-inner">
+
+
+                            <div id="entry-1669" class="entry-asset asset hentry">
+                                <div class="asset-header">
+<div class="asset-nav entry-nav">
+
+<div class="entry-location">
+<ul>
+<li>上一篇：<a href="http://www.ruanyifeng.com/blog/2011/08/the_quiet_mode_of_influence.html" title="影响力的静模式">影响力的静模式&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+<li>下一篇：<a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_two.html" title="贝叶斯推断及其互联网应用（二）：过滤垃圾邮件">贝叶斯推断及其互联网应</a></li>
+</ul>
+</div>
+
+
+    
+                                    <div class="entry-categories">
+                                        <p>分类<span class="delimiter">：</span></p>
+                                        <ul>
+                                            <li><a href="http://www.ruanyifeng.com/blog/algorithm/" rel="tag">算法与数学</a></li>
+                                        </ul>
+                                    </div>
+    
+
+
+                                            
+<div class="entry-location-mobile" style="float: right;">
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2011/08/the_quiet_mode_of_influence.html" title="影响力的静模式">⇐&nbsp;</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_two.html" title="贝叶斯推断及其互联网应用（二）：过滤垃圾邮件">&nbsp;⇒</a></li>
+</ul>
+</div>
+
+</div>
+</div>
+
+                          
+<article class="hentry">
+                                    <h1 id="page-title" class="asset-name entry-title">贝叶斯推断及其互联网应用（一）：定理简介</h1>
+                                            <div id="share_button" class="social-share" style="float:right;padding-right:2em;padding-top:1em;">
+<a class="bshareDiv" href="http://www.bshare.cn/share" style="display: block; text-decoration: none; padding: 0px; margin: 0px; font-size: 12px; height: 21px; width: 51px;"><div class="bsPromo bsPromo1"></div><div class="buzzButton bsStyle10" style="height:21px;color:#333;;background:transparent url(//static.bshare.cn/frame/images/button_custom10-zh-Orange.gif) no-repeat;text-align:center;width:51px;"></div><div style="clear:both;"></div></a>
+
+
+
+<script type="text/javascript" charset="utf-8" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/buttonLite.js"></script>
+<script type="text/javascript" charset="utf-8">
+bShare.addEntry({
+    title: document.getElementById("page-title").innerHTML,
+url:window.location.href
+});
+</script>
+</div>
+
+<div class="asset-meta">
+                                        
+
+                                            <p class="vcard author">作者： <a class="fn url" href="http://www.ruanyifeng.com/">阮一峰</a></p>
+                                    <p>日期： <a href="http://www.ruanyifeng.com/blog/2011/08/"><abbr class="published" title="2011-08-25T12:09:37+08:00">2011年8月25日</abbr></a></p>
+
+
+                                    
+</div>
+
+                    
+<div class="entry-sponsor" style="border: 1px solid #c6c6c6;border-radius: 4px;background-color: #f5f2f0;">
+<p>
+<a title="珠峰培训" href="http://www.zhufengpeixun.cn/main/course/guide.html?ref=ruanyifeng.com" target="_blank">
+<img alt="珠峰培训" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/sponsor_zhufeng5.png" style="border: none;windth: 90%;max-width: 90%;display: inline-block;margin-top: -0.5rem;margin-bottom: 0.5rem;">
+</a>
+</p>
+</div>
+
+
+                                
+                                <div class="asset-content entry-content" id="main-content">
+
+                                    <!-- div class="asset-body" -->
+                                        <p><a href="http://www.ruanyifeng.com/blog/2010/08/not_working_hard_for_a_big_company.html" target="_blank">一年前</a>的这个时候，我正在翻译Paul Graham的<a href="http://www.ruanyifeng.com/docs/pg/" target="_blank">《黑客与画家》</a>。</p>
+                                    <!-- /div -->
+
+
+                                    <!-- div id="more" class="asset-more" -->
+                                        <p>那本书的第八章，写了一个非常具体的技术问题----如何使用贝叶斯推断过滤垃圾邮件（<a href="http://www.paulgraham.com/spam.html" target="_blank">英文版</a>）。</p>
+
+<p>我没完全看懂那一章。当时是硬着头皮，按照字面意思把它译出来的。虽然译文质量还可以，但是心里很不舒服，下决心一定要搞懂它。</p>
+
+<p>一年过去了，我读了一些概率论文献，逐渐发现贝叶斯推断并不难。原理的部分相当容易理解，不需要用到高等数学。</p>
+
+<p>下面就是我的学习笔记。需要声明的是，我并不是这方面的专家，数学其实是我的弱项。欢迎大家提出宝贵意见，让我们共同学习和提高。</p>
+
+<p>=====================================</p>
+
+<p><strong>贝叶斯推断及其互联网应用</strong></p>
+
+<p>作者：阮一峰</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bg2011082507.jpg"></p>
+
+<p><strong>一、什么是贝叶斯推断</strong></p>
+
+<p>贝叶斯推断（<a href="http://en.wikipedia.org/wiki/Bayesian_inference" target="_blank">Bayesian inference</a>）是一种统计学方法，用来估计统计量的某种性质。</p>
+
+<p>它是贝叶斯定理（<a href="http://en.wikipedia.org/wiki/Bayes%27_theorem" target="_blank">Bayes' theorem</a>）的应用。英国数学家托马斯·贝叶斯（Thomas Bayes）在1763年发表的一篇论文中，首先提出了这个定理。</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bg2011082501.jpg"></p>
+
+<p>贝叶斯推断与其他统计学推断方法截然不同。它建立在主观判断的基础上，也就是说，你可以不需要客观证据，先估计一个值，然后根据实际结果不断修正。正是因为它的主观性太强，曾经遭到许多统计学家的诟病。</p>
+
+<p>贝叶斯推断需要大量的计算，因此历史上很长一段时间，无法得到广泛应用。只有计算机诞生以后，它才获得真正的重视。人们发现，许多统计量是无法事先进行客观判断的，而互联网时代出现的大型数据集，再加上高速运算能力，为验证这些统计量提供了方便，也为应用贝叶斯推断创造了条件，它的威力正在日益显现。</p>
+
+<p><strong>二、贝叶斯定理</strong></p>
+
+<p>要理解贝叶斯推断，必须先理解贝叶斯定理。后者实际上就是计算"条件概率"的公式。</p>
+
+<p>所谓"条件概率"（Conditional probability），就是指在事件B发生的情况下，事件A发生的概率，用P(A|B)来表示。</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bg2011082502.jpg"></p>
+
+<p>根据文氏图，可以很清楚地看到在事件B发生的情况下，事件A发生的概率就是P(A∩B)除以P(B)。</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart" style="border:none;"></p>
+
+<p>因此，</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(1)" style="border:none;"></p>
+
+<p>同理可得，</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(2)" style="border:none;"></p>
+
+<p>所以，</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(3)" style="border:none;"></p>
+
+<p>即</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(4)" style="border:none;"></p>
+
+<p>这就是条件概率的计算公式。</p>
+
+<p><strong>三、全概率公式</strong></p>
+
+<p>由于后面要用到，所以除了条件概率以外，这里还要推导全概率公式。</p>
+
+<p>假定样本空间S，是两个事件A与A'的和。</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bg2011082503.jpg"></p>
+
+<p>上图中，红色部分是事件A，绿色部分是事件A'，它们共同构成了样本空间S。</p>
+
+<p>在这种情况下，事件B可以划分成两个部分。</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bg2011082504.jpg"></p>
+
+<p>即</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(5)" style="border:none;"></p>
+
+<p>在上一节的推导当中，我们已知</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(6)" style="border:none;"></p>
+
+<p>所以，</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(7)" style="border:none;"></p>
+
+<p>这就是全概率公式。它的含义是，如果A和A'构成样本空间的一个划分，那么事件B的概率，就等于A和A'的概率分别乘以B对这两个事件的条件概率之和。</p>
+
+<p>将这个公式代入上一节的条件概率公式，就得到了条件概率的另一种写法：</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(8)" style="border:none;"></p>
+
+<p><strong>四、贝叶斯推断的含义</strong></p>
+
+<p>对条件概率公式进行变形，可以得到如下形式：</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(9)" style="border:none;"></p>
+
+<p>我们把P(A)称为"先验概率"（Prior probability），即在B事件发生之前，我们对A事件概率的一个判断。P(A|B)称为"后验概率"（Posterior probability），即在B事件发生之后，我们对A事件概率的重新评估。P(B|A)/P(B)称为"可能性函数"（Likelyhood），这是一个调整因子，使得预估概率更接近真实概率。</p>
+
+<p>所以，条件概率可以理解成下面的式子：</p>
+
+<blockquote>
+
+<p>　　后验概率　＝　先验概率 ｘ 调整因子</p>
+
+</blockquote>
+
+<p><strong>这就是贝叶斯推断的含义。我们先预估一个"先验概率"，然后加入实验结果，看这个实验到底是增强还是削弱了"先验概率"，由此得到更接近事实的"后验概率"。</strong></p>
+
+<p>在这里，如果"可能性函数"P(B|A)/P(B)&gt;1，意味着"先验概率"被增强，事件A的发生的可能性变大；如果"可能性函数"=1，意味着B事件无助于判断事件A的可能性；如果"可能性函数"&lt;1，意味着"先验概率"被削弱，事件A的可能性变小。</p>
+
+<p><strong>五、【例子】水果糖问题</strong></p>
+
+<p>为了加深对贝叶斯推断的理解，我们看两个例子。</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bg2011082505.jpg"></p>
+
+<p>第一个例子。两个一模一样的碗，一号碗有30颗水果糖和10颗巧克力糖，二号碗有水果糖和巧克力糖各20颗。现在随机选择一个碗，从中摸出一颗糖，发现是水果糖。请问这颗水果糖来自一号碗的概率有多大？</p>
+
+<p>我们假定，H1表示一号碗，H2表示二号碗。由于这两个碗是一样的，所以P(H1)=P(H2)，也就是说，在取出水果糖之前，这两个碗被选中的概率相同。因此，P(H1)=0.5，我们把这个概率就叫做"先验概率"，即没有做实验之前，来自一号碗的概率是0.5。</p>
+
+<p>再假定，E表示水果糖，所以问题就变成了在已知E的情况下，来自一号碗的概率有多大，即求P(H1|E)。我们把这个概率叫做"后验概率"，即在E事件发生之后，对P(H1)的修正。</p>
+
+<p>根据条件概率公式，得到</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(10)" style="border:none;"></p>
+
+<p>已知，P(H1)等于0.5，P(E|H1)为一号碗中取出水果糖的概率，等于0.75，那么求出P(E)就可以得到答案。根据全概率公式，</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(11)" style="border:none;"></p>
+
+<p>所以，</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(12)" style="border:none;"></p>
+
+<p>将数字代入原方程，得到</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(13)" style="border:none;"></p>
+
+<p>这表明，来自一号碗的概率是0.6。也就是说，取出水果糖之后，H1事件的可能性得到了增强。</p>
+
+<p><strong>六、【例子】假阳性问题</strong></p>
+
+<p>第二个例子是一个医学的常见问题，与现实生活关系紧密。</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/bg2011082506.jpg"></p>
+
+<p>已知某种疾病的发病率是0.001，即1000人中会有1个人得病。现有一种试剂可以检验患者是否得病，它的准确率是0.99，即在患者确实得病的情况下，它有99%的可能呈现阳性。它的误报率是5%，即在患者没有得病的情况下，它有5%的可能呈现阳性。现有一个病人的检验结果为阳性，请问他确实得病的可能性有多大？</p>
+
+<p>假定A事件表示得病，那么P(A)为0.001。这就是"先验概率"，即没有做试验之前，我们预计的发病率。再假定B事件表示阳性，那么要计算的就是P(A|B)。这就是"后验概率"，即做了试验以后，对发病率的估计。</p>
+
+<p>根据条件概率公式，</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(14)" style="border:none;"></p>
+
+<p>用全概率公式改写分母，</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(15)" style="border:none;"></p>
+
+<p>将数字代入，</p>
+
+<p><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/chart(16)" style="border:none;"></p>
+
+<p>我们得到了一个惊人的结果，P(A|B)约等于0.019。也就是说，即使检验呈现阳性，病人得病的概率，也只是从0.1%增加到了2%左右。这就是所谓的"假阳性"，即阳性结果完全不足以说明病人得病。</p>
+
+<p>为什么会这样？为什么这种检验的准确率高达99%，但是可信度却不到2%？答案是与它的误报率太高有关。（【习题】如果误报率从5%降为1%，请问病人得病的概率会变成多少？）</p>
+
+<p>有兴趣的朋友，还可以算一下"假阴性"问题，即检验结果为阴性，但是病人确实得病的概率有多大。然后问自己，"假阳性"和"假阴性"，哪一个才是医学检验的主要风险？</p>
+
+<p>===================================</p>
+
+<p>关于贝叶斯推断的原理部分，今天就讲到这里。下一次，将介绍如何使用贝叶斯推断<a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_two.html" target="_blank">过滤垃圾邮件</a>。</p>
+
+<p>（未完待续）<br>
+</p>
+                                    <!-- /div -->
+
+                                </div>
+    <script type="text/javascript" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/newwindow.js"></script>
+                                <div class="asset-footer">
+
+<h3>文档信息</h3>
+<ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创意共享3.0许可证</a>）</li>
+<li>发表日期： <abbr class="published" title="2011-08-25T12:09:37+08:00">2011年8月25日</abbr></li>
+<li>更多内容： <a href="http://www.ruanyifeng.com/blog/archives.html" target="_blank"> 档案</a>  » 
+<a href="http://www.ruanyifeng.com/blog/algorithm/"> 算法与数学</a> 
+</li>
+<li>博客文集：<a href="http://road.ruanyifeng.com/" target="_blank">《前方的路》</a>，<a href="http://survivor.ruanyifeng.com/" target="_blank">《未来世界的幸存者》</a></li>
+<li>社交媒体：<a href="https://twitter.com/ruanyf" target="_blank"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAk1JREFUeNqsVc9rE0EU/mZ3dhPNJl2bVIk/Km09aFBE8GLvnrwJXvwLxIsgCP4Fnit6E8Gb0IMHwUsL9SSNgiAoooJIpE1Joo1h82uT7IxvxmRN3Q32kAdvdrI773vfe+/bDTu9WioDcDAda3Ja8piepQ1avCkCeny0Y+R9KenKwOmHHLvPaKn7AtVOoO8dOWDCMpg+41gMQv5FNEJACgoE8MsPNLDBhgfoutMOsJDmWLmU037C4TApciljwQ/kHoohQxV06+wMXNvE7WINuaSpvdYVKLgWnl3O4zAxU3Z1IYVGT+B5qYWV9z2kbQaT/cOwTsxOUUYF+mB5Dkmi8HG3h2q9hxsFNwRTdvQgxxnXRrMvIdkEhllis/qtiWuLDm4WZnBlPoWnXz28LHdw0uGR7m9Wu3j0qYGEubfn4UlBfXO4gTZltRNMg9w9f0i7kNFxllsBlS0x75gYfxyWTBUjT2W5CSMSPBrQuG21+hiMDS8CeCzF8eSLp13uQ3Ab1IqMFZN8tFHPmgOBF99bYP8Be1Xp6t7OJszJgKpPSiZvaj7uf2hguz2IBQuozDvFH6RDBjuK9wdQDvt0nMpW+8efGyh5UcAeZb2+UcHbnz5Jx4wdlp4yJYU3kLiQtfBwOYeLc8nIwfXtNu69q2Oz4mMxbemYOOOjKarhvq51KUjg3GwiFPIuvcNF6pnSnWK0lOEabNLgQh1aJFAhlGB9rG110B2+oyRNPc0sZbRNFltmLKDKqj4Qrm1ojzOxDz2pyPQ0P7CK4c40/wJ+CzAAGYrXsvfFXR4AAAAASUVORK5CYII=" style="border:0;"> twitter</a>，<a href="http://weibo.com/ruanyf" target="_blank"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Ynr5egJ5Mb6feeb3n+hx9L/1U/W36p/VHDFgGswwkBtsMzhg8xTVxbzwdL8fb8VFDXcNAQ6VhlWGX4YSRudE8o9VGjUYPjGnGXOMk423GbcajJgYmISZLTepN7ppSTbmmKaY7TDtMx83MzaLN1pk1mz0x1zLnm+eb15vft2BaeFostqi2uGVJsuRaplnutrxuhVo5WaVYVVpds0atna0l1rutu6cRp7lOk06rntZnw7Dxtsm2qbcZsOXYBtuutm22fWFnYhdnt8Wuw+6TvZN9un2N/T0HDYfZDqsdWh1+c7RyFDpWOt6azpzuP33F9JbpL2dYzxDP2DPjthPLKcRpnVOb00dnF2e5c4PziIuJS4LLLpc+Lpsbxt3IveRKdPVxXeF60vWdm7Obwu2o26/uNu5p7ofcn8w0nymeWTNz0MPIQ+BR5dE/C5+VMGvfrH5PQ0+BZ7XnIy9jL5FXrdewt6V3qvdh7xc+9j5yn+M+4zw33jLeWV/MN8C3yLfLT8Nvnl+F30N/I/9k/3r/0QCngCUBZwOJgUGBWwL7+Hp8Ib+OPzrbZfay2e1BjKC5QRVBj4KtguXBrSFoyOyQrSH355jOkc5pDoVQfujW0Adh5mGLw34MJ4WHhVeGP45wiFga0TGXNXfR3ENz30T6RJZE3ptnMU85ry1KNSo+qi5qPNo3ujS6P8YuZlnM1VidWElsSxw5LiquNm5svt/87fOH4p3iC+N7F5gvyF1weaHOwvSFpxapLhIsOpZATIhOOJTwQRAqqBaMJfITdyWOCnnCHcJnIi/RNtGI2ENcKh5O8kgqTXqS7JG8NXkkxTOlLOW5hCepkLxMDUzdmzqeFpp2IG0yPTq9MYOSkZBxQqohTZO2Z+pn5mZ2y6xlhbL+xW6Lty8elQfJa7OQrAVZLQq2QqboVFoo1yoHsmdlV2a/zYnKOZarnivN7cyzytuQN5zvn//tEsIS4ZK2pYZLVy0dWOa9rGo5sjxxedsK4xUFK4ZWBqw8uIq2Km3VT6vtV5eufr0mek1rgV7ByoLBtQFr6wtVCuWFfevc1+1dT1gvWd+1YfqGnRs+FYmKrhTbF5cVf9go3HjlG4dvyr+Z3JS0qavEuWTPZtJm6ebeLZ5bDpaql+aXDm4N2dq0Dd9WtO319kXbL5fNKNu7g7ZDuaO/PLi8ZafJzs07P1SkVPRU+lQ27tLdtWHX+G7R7ht7vPY07NXbW7z3/T7JvttVAVVN1WbVZftJ+7P3P66Jqun4lvttXa1ObXHtxwPSA/0HIw6217nU1R3SPVRSj9Yr60cOxx++/p3vdy0NNg1VjZzG4iNwRHnk6fcJ3/ceDTradox7rOEH0x92HWcdL2pCmvKaRptTmvtbYlu6T8w+0dbq3nr8R9sfD5w0PFl5SvNUyWna6YLTk2fyz4ydlZ19fi753GDborZ752PO32oPb++6EHTh0kX/i+c7vDvOXPK4dPKy2+UTV7hXmq86X23qdOo8/pPTT8e7nLuarrlca7nuer21e2b36RueN87d9L158Rb/1tWeOT3dvfN6b/fF9/XfFt1+cif9zsu72Xcn7q28T7xf9EDtQdlD3YfVP1v+3Njv3H9qwHeg89HcR/cGhYPP/pH1jw9DBY+Zj8uGDYbrnjg+OTniP3L96fynQ89kzyaeF/6i/suuFxYvfvjV69fO0ZjRoZfyl5O/bXyl/erA6xmv28bCxh6+yXgzMV70VvvtwXfcdx3vo98PT+R8IH8o/2j5sfVT0Kf7kxmTk/8EA5jz/GMzLdsAAAAgY0hSTQAAeiUAAICDAAD5/wAAgOkAAHUwAADqYAAAOpgAABdvkl/FRgAABPZJREFUeNqMyXtM1WUcx/FnNTdreAVCEEThyEFUrM2kwkpS05qVl8rugVpRUelaJdZaWWktdZKHssImgV04osgBCbwAa2Whm6GWoXHxcD1wHiI4t9/z/H68+wO3av1R3+217/b+CFStsHq/W2V1HW+wOmq8VkeN/E+dR/7SUSOtrmOnLc93jxA6LsTw71XLrUsHsNwHsdxl/09HGVb7QawOF1bn4ZF26QDDsmqNsH7be9psKcJs+fy/tRZjXvwM//678BVdT6BsMarhxZHeug+reW+TMC84+s0LDv4tH7PZgdXqwGrLx7yYP9KaHISOvUCwYh3+4iUMOiIJVmSMbBfy+4X581Zp/ryVfzi/FfPXd1AntxNwvkvg6zfQZ7Zg/rIV8/x7qB9fJlT/JPrcm4SOPctg3ihCR5dhNu2QQjfmSt2Yi27MRf+Uiz67Ef1TLv7Ct5CPZtMzJ4N2243Ij7Kwmjdhnt+EUZeFr/BmhvYkoBqewl8yD9/eCejGTVLoUzlSn8pBn8xBn85B/fAcf7z6PJ7rl9KdNBdP6nwuJc2jL+9+jJrXGNr1On9seZHgkQ0ESq8l4EzBOLKMod1XoE6slUKfXCd1wxp0Qxb6RBYDLzxGz8xb8aSm05u2kL4bF9N902I89yzHe986PEseoGP2YjqfvpNQeTr+4rmEKucz6LgS9f1jUuiy+VIfvxvz1GoGN99Hz8wFeGan0zl3Ae4lK3A/vJb2x7PpWPEI3bevoHfJKtypt9H1UgbDZx5E//goofJF+AtmoasWSaG2jZE6P5zg9hQ8Nyyie1Y6rQ+vpafMhdHXx7BpgjWMr7sbT5kL9/IHcUck0X3LtfgLVqAP3YAumoHeHYvaPkYKlRcudf54Bh5KpjP5Fi69tplgIMCQabK/rIxtO3bgqqxkmJHzdXbRknYbrWIcrWEJ9D8RjXaMRe2ciNo5QQr1QYRUjnC8C1Nxr1pD0O/HFwyQmZmJ3W4nLS0Nm83G+vXrsSwLgP6vS2kWo/lNjKN57gTMTyJRH0Si8iZKoXZdI5Ujkt55SXRtfBuAffv2sXLlSpxOJ9nZ2SQkJBAWFobX6wVgoPooLWI0v4hxuFeFY30ahdoVhcqLkEJ9GCV1QRTehZNxZ9wPQNGXX5KZmUlbWxspKSkIIUhPT0dZFibQvSaHJjGKxujxBHZGoT+ehPpwEsoRIYUqmCR1YTTBd2NoGxtOz4Y3CPoDrNuwnuhpU7lq/HgW3LGU5l4P2h+g55XNnBOjORM/jsH3ozGLYlAFMag90ahPI6VQxZOlKo5BOyfjey+GliljaL0uA7l9D2f37uess5KBoyfwbvmIJnsajVePouXeCIKFsZglsajiyX8pvEYKoySm33DGYTjj0OVxhEri6N84kfalY2i/NRb3AhvNN0+i9Y4wPC+H4yuMxTocjzoYj7F/ymVxI/+ryH5huKaeMVzxGK54QuXT8B+y4atIZqB8Nt6SVDzFqXi+mIO39Dp+PziHwdIZDJVOJ3gogZArHsM1BcMVj1E+BcMVe1GY38auNqqnYdQkEKpOJPBNEv7DdnyVdnwVdoYqki+bge9wCv6qFAJVyQS/mU6oJhHjSCJG9VSM6kRUfXi2GK6fJYy6+CyjNrHRqLP1GbWJ0qizSfV39Tap6qdLVW+Xqt4ujfokadRdVpvgNWpt54y6qc8MV44Sfw4An+t+Gj1AKyYAAAAASUVORK5CYII=" style="border:0;"> weibo</a></li>
+<li>Feed订阅： <a href="http://www.ruanyifeng.com/feed.html" target="_blank"><img src="data:image/gif;base64,R0lGODlhFAAUANU2APV1GfmrePZ8IeR5VPq2ieNkLf7p3NpFJveCJ/NoFfibVPR1IexiJfvdzuZrNfXGuOhUEueTevaFOfzIpNxDGeZZJNU6IOubifiVTfOnid1aLuZpLOFSJf/28vJtIvGcefaLSd5kNu9iFv/z6//48//t4uFfLfNkCeJNGuGNc/rCof/+/PVxEeldI/V5KeKMbu9nIvB2OvzQtNxMKfOPXP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAADYALAAAAAAUABQAAAb/QJstEjKZCsjCZsl0pIS2QWXaYsA8noVWIEAgFoNhhWNyMESi7Jbr/aZCFdRnZJAFJCwAt+vlOkwtEBk1hDUkExJ6bQJaGyYMLTQTDSOFHQF8jAseSFYiJwkuAQ2FE1xaHjBIMDAgARguJwABJIQTLJswDEgeIgSEJQQILAqVNQEiui1HHgkBhTUGCiwYtR0xLS0VJhtaEgoEBoQkGCfPNSoQY9xaCwAsCBPALgmkJA4cZN0CAAgY/PJqEIDwgVAECjM0bOAnwcAKGQJclKhRgoGDDjUeUDigkN8vQiBOfByAglSDAxw3IBCgYEU0FyJoEPpA4UGNDjMsaHDQR8EdPVYOMmQYQGHAhQgHLIRIsWAlgASsGMRBMWMGBQtYZ7yIsoBRKkhjOMxAiXJGGCEpHGxIYsSIhrcaQmy1EQQAOw==" style="border:0;"></a></li>
+
+</ul>
+                                </div>
+</article>
+                            </div>
+
+  <div id="sup-post-2" style="display: inline-block ! important;width: 100%;">
+    <p style="text-align:center;"><a title="”一灯学堂“" href="http://www.yidengxuetang.com/recruit?utm_source=ruanyifeng.com" target="_blank"><img alt="一灯学堂" src="http://www.ruanyifeng.com/blog/images/sup_yideng_201711a.jpg" style="border: none; display: none !important;"><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/backup_sup_yideng_201711a.jpg" style="border: none;"></a></p>  
+    <p style="text-align:center;"><a title="优达学城" href="https://cn.udacity.com/course/react-nanodegree--nd019-cn/?utm_source=ruanyfc&amp;utm_medium=KOL&amp;utm_campaign=react" target="_blank"><img alt="优达学城" src="http://www.ruanyifeng.com/blog/images/sup_udacity_201711c.jpg" style="border: none; display: none !important;"><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/backup_sup_udacity_201711c.jpg" style="border: none;"></a></p>
+  </div>
+
+<div id="related_entries">
+<h2>相关文章</h2>
+<ul>
+
+<li><strong>2017.12.13: <a href="http://www.ruanyifeng.com/blog/2017/12/image-and-wave-filters.html">图像与滤波</a></strong>
+
+                           <div class="entry-body">
+                              我对图像处理一直很感兴趣，曾经写过好几篇博客（1，2，3，4）。
+
+                           </div>
+
+</li>
+
+ 
+<li><strong>2017.08.02: <a href="http://www.ruanyifeng.com/blog/2017/08/normal-distribution.html">正态分布为什么常见？</a></strong>
+
+                           <div class="entry-body">
+                              统计学里面，正态分布（normal distribution）最常见。男女身高、寿命、血压、考试成绩、测量误差等等，都属于正态分布。
+
+                           </div>
+
+</li>
+
+ 
+<li><strong>2017.07.13: <a href="http://www.ruanyifeng.com/blog/2017/07/neural-network.html">神经网络入门</a></strong>
+
+                           <div class="entry-body">
+                              眼下最热门的技术，绝对是人工智能。
+
+                           </div>
+
+</li>
+
+ 
+<li><strong>2016.07.22: <a href="http://www.ruanyifeng.com/blog/2016/07/edge-recognition.html">如何识别图像边缘？</a></strong>
+
+                           <div class="entry-body">
+                              图像识别（image recognition）是现在的热门技术。
+
+                           </div>
+
+</li>
+
+ 
+</ul>
+</div>
+
+
+<div id="gd1" style="display: block !important;">
+<h2>广告<a href="http://www.ruanyifeng.com/support.html">（购买广告位）</a></h2>
+<div id="gd1-inner">
+<div id="gd1-left">
+<a href="http://www.miaov.com/index.php/example/exampleList?utm_source=ruanyifeng&amp;" alt="妙味课堂" target="_blank"><img alt="妙味课堂" src="http://www.ruanyifeng.com/blog/images/sup_miaov_201711.jpg" style="border: none; display: none !important;"><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/backup_sup_miaov_201711.jpg" style="border: none;"></a>
+</div>
+<div id="gd1-right">
+<a href="https://ke.qq.com/next/index.html?from=175763" title="腾讯课堂" target="_blank"><img alt="腾讯课堂" src="http://www.ruanyifeng.com/blog/images/sup_qqke_20171202.png" style="border: none; display: none !important;"><img src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/backup_sup_qqke_20171202.png" style="border: none;"></a>
+
+
+</div>
+</div>
+</div>
+                    
+
+                    <div id="comments" class="comments">
+
+
+    
+    
+        
+    <h2 class="comments-header">留言（75条）</h2>
+
+    <div id="comments-content" class="comments-content" style="clear: left;">
+        
+        <div id="comment-226219" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">cndj</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226219">
+            <p>汗, 没看明白翻译出来的?　那时候看书还觉得讲的挺清晰的</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011 12:36 PM">2011年8月25日 12:36</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226219">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用cndj的这条留言" onclick="return CommentQuote(&#39;comment-quote-226219&#39;,&#39;cndj&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226221" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://chengming.info/" href="http://chengming.info/" target="_blank" rel="nofollow">tristan</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226221">
+            <p>我现在开始惊叹，当年高数是怎么过的。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011 12:48 PM">2011年8月25日 12:48</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226221">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用tristan的这条留言" onclick="return CommentQuote(&#39;comment-quote-226221&#39;,&#39;tristan&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226222" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">qq</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226222">
+            <p>可以很清楚地看到在事件B发生的情况下，事件A发生的概率就是P(A∩B)除以P(B)<br>
+这个是为什么呢,我连这个很清楚的东西都不太清楚,楼主再讲下</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  1:11 PM">2011年8月25日 13:11</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226222">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用qq的这条留言" onclick="return CommentQuote(&#39;comment-quote-226222&#39;,&#39;qq&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226224" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">ssddi456</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226224">
+            <p>无责任揭底大约提高五倍约10%.<br>
+验证方法患病检出正确率在0.995，未患病检出误报率在0.005时，阳性患病几率也不过六成七<br>
+单指标检测的正确率实在不怎么样啊</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  2:00 PM">2011年8月25日 14:00</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226224">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用ssddi456的这条留言" onclick="return CommentQuote(&#39;comment-quote-226224&#39;,&#39;ssddi456&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226226" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://cutenotes.wordpress.com" href="http://cutenotes.wordpress.com/" target="_blank" rel="nofollow">ls zhao</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226226">
+            <p>哎呀，看到这些就头疼地很。当时把高数糊弄过去了，不过这里讲地好</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  2:11 PM">2011年8月25日 14:11</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226226">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用ls zhao的这条留言" onclick="return CommentQuote(&#39;comment-quote-226226&#39;,&#39;ls zhao&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226228" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">resty</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226228">
+            <p>@qq <br>
+因为A B同时发生的概率为P(A∩B) = P(B) * P(A | B) ， 那么P(A | B) = P(A∩B) / P(B)......</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  2:34 PM">2011年8月25日 14:34</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226228">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用resty的这条留言" onclick="return CommentQuote(&#39;comment-quote-226228&#39;,&#39;resty&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226230" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">哺风</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226230">
+            <p>@qq</p>
+
+<p>“可以很清楚地看到在事件B发生的情况下，事件A发生的 概率 就是P(A∩B)除以P(B)”</p>
+
+<p>原话应为：</p>
+
+<p>“可以很清楚地看到在事件B发生的情况下，事件A发生的 条件概率 P(A|B)就是P(A∩B)除以P(B)”</p>
+
+<p><br>
+阮兄的原话参看上下文也没错，原文的概率指的就是条件概率。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  3:16 PM">2011年8月25日 15:16</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226230">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用哺风的这条留言" onclick="return CommentQuote(&#39;comment-quote-226230&#39;,&#39;哺风&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226234" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">自由国度</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226234">
+            <p>不就是概率末。。。概率上过大学的人都要学的吧。<br>
+不过最初发现的人还是最牛的</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  4:04 PM">2011年8月25日 16:04</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226234">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用自由国度的这条留言" onclick="return CommentQuote(&#39;comment-quote-226234&#39;,&#39;自由国度&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226236" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">lesley</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226236">
+            <p>如果假阴性率是0.05，检验结果是阴性，患病几率是不是5.05*10-5</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  4:39 PM">2011年8月25日 16:39</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226236">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用lesley的这条留言" onclick="return CommentQuote(&#39;comment-quote-226236&#39;,&#39;lesley&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226239" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://colordancer.net" href="http://colordancer.net/" target="_blank" rel="nofollow">colordancer</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226239">
+            <p>“请问这颗水果糖来自一号碗的概率有多大？”<br>
+和<br>
+“已知，P(H1)等于0.5，P(E|H1)为一号碗中取出水果糖的概率，等于0.75，”</p>
+
+<p>这颗水果糖来自一号碗 和 一号碗中取出水果糖<br>
+这两句话不一样吗</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  5:30 PM">2011年8月25日 17:30</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226239">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用colordancer的这条留言" onclick="return CommentQuote(&#39;comment-quote-226239&#39;,&#39;colordancer&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226242" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://viecho.com" href="http://viecho.com/" target="_blank" rel="nofollow">微波信号</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226242">
+            <p>今天各种刺激，先是推上看他们讨论微波天线，来着讨论贝叶斯推断，大学各种挂科伤心事涌上心头。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  6:00 PM">2011年8月25日 18:00</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226242">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用微波信号的这条留言" onclick="return CommentQuote(&#39;comment-quote-226242&#39;,&#39;微波信号&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226243" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://my.opera.com/jlake/blog/" href="http://my.opera.com/jlake/blog/" target="_blank" rel="nofollow">jlake</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226243">
+            <p>为过滤垃圾邮件，曾经用过 POPFile。<br>
+从那时候知道了贝叶斯算法这个名词，具体怎么实现从未关心过。<br>
+这篇文章算是给我扫盲了。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  6:04 PM">2011年8月25日 18:04</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226243">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用jlake的这条留言" onclick="return CommentQuote(&#39;comment-quote-226243&#39;,&#39;jlake&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226247" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://www.isnowfy.com" href="http://www.isnowfy.com/" target="_blank" rel="nofollow">isnowfy</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226247">
+            <p>可以查看这篇文章个人觉得讲的挺好的http://mindhacks.cn/2008/09/21/the-magical-bayesian-method/</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 25, 2011  7:18 PM">2011年8月25日 19:18</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226247">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用isnowfy的这条留言" onclick="return CommentQuote(&#39;comment-quote-226247&#39;,&#39;isnowfy&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226277" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">daiyechu</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226277">
+            <p>我可不可以这么理解呢？权当拿出水果糖已经是一定的事件，也就是1。而一碗水中的水果糖占了总水果糖的60%，就可以得出概率是0.6。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 26, 2011 10:24 AM">2011年8月26日 10:24</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226277">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用daiyechu的这条留言" onclick="return CommentQuote(&#39;comment-quote-226277&#39;,&#39;daiyechu&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226288" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">lee</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226288">
+            <p>可悲的大学，等我上完了貌似水平还不如我上高中的时候。。。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 26, 2011  3:58 PM">2011年8月26日 15:58</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226288">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用lee的这条留言" onclick="return CommentQuote(&#39;comment-quote-226288&#39;,&#39;lee&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226335" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://NIUSHINESHINE.CO.CC" href="http://niushineshine.co.cc/" target="_blank" rel="nofollow">NSS</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226335">
+            <p>贝叶斯可以说是现代机器学习技术方面的基础，比如大家熟知的搜索引擎，就非常依赖贝叶斯。</p>
+
+<p>单从公式上看可能比较晦涩，画几个简单的集合图形就会非常好理解。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 27, 2011 12:53 PM">2011年8月27日 12:53</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226335">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用NSS的这条留言" onclick="return CommentQuote(&#39;comment-quote-226335&#39;,&#39;NSS&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226368" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Allen</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226368">
+            <p>那文氏圖很不錯，重溫了上學期學的條件概率。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 27, 2011 10:35 PM">2011年8月27日 22:35</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226368">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Allen的这条留言" onclick="return CommentQuote(&#39;comment-quote-226368&#39;,&#39;Allen&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226463" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://srcoo.com" href="http://srcoo.com/" target="_blank" rel="nofollow">happybird</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226463">
+            <blockquote>
+<pre>引用qq的发言：</pre>
+
+<p>可以很清楚地看到在事件B发生的情况下，事件A发生的概率就是P(A∩B)除以P(B)<br>
+这个是为什么呢,我连这个很清楚的东西都不太清楚,楼主再讲下</p>
+
+</blockquote>
+
+<p>我是这样理解的：<br>
+首先：A是黄色，B是蓝色，中间相交的那部分是B盖在A上的部分。<br>
+A发生以后B再发生的部分就是相交的那一部分，这一部分在B中的分量是<br>
+p(b)分之p(a^b)</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 29, 2011 10:33 PM">2011年8月29日 22:33</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226463">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用happybird的这条留言" onclick="return CommentQuote(&#39;comment-quote-226463&#39;,&#39;happybird&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226763" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://a-shi.org" href="http://a-shi.org/" target="_blank" rel="nofollow">阿四</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226763">
+            <p>关于Bayes theorem，陶哲轩（一个年轻有名的数学家）讲到了一个有趣的例子：<br>
+<a href="https://plus.google.com/114134834346472219368/posts/Vu7aFD8SPB7" rel="nofollow">https://plus.google.com/114134834346472219368/posts/Vu7aFD8SPB7</a></p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September  2, 2011  8:22 PM">2011年9月 2日 20:22</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226763">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用阿四的这条留言" onclick="return CommentQuote(&#39;comment-quote-226763&#39;,&#39;阿四&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-226930" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">麦公</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-226930">
+            <p>难道习题1%我算错了</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September  5, 2011  3:41 PM">2011年9月 5日 15:41</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-226930">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用麦公的这条留言" onclick="return CommentQuote(&#39;comment-quote-226930&#39;,&#39;麦公&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-227731" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://zhaorui.cnblogs.cn" href="http://zhaorui.cnblogs.cn/" target="_blank" rel="nofollow">zhaorui</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-227731">
+            <p>第一个问题，我算出来的结果是大概9%，看到楼上有10%的，不太确定自己的答案。</p>
+
+<p>我的计算公式为：(0.001*0.99)/((0.99*0.001)+(0.01*0.999))</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September 11, 2011 11:59 PM">2011年9月11日 23:59</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-227731">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用zhaorui的这条留言" onclick="return CommentQuote(&#39;comment-quote-227731&#39;,&#39;zhaorui&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-227732" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://zhaorui.cnblogs.cn" href="http://zhaorui.cnblogs.cn/" target="_blank" rel="nofollow">zhaorui</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-227732">
+            <p>假阴性把我给绕进去了</p>
+
+<p>计算公式为：(0.999*0.05)/((0.05*0.999)+(0.95*0.99)) ?</p>
+
+<p>结果：0.6 ?</p>
+
+<p>请指教</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September 12, 2011 12:12 AM">2011年9月12日 00:12</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-227732">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用zhaorui的这条留言" onclick="return CommentQuote(&#39;comment-quote-227732&#39;,&#39;zhaorui&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-228426" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">tony</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-228426">
+            <p>呵呵 讲的真清楚。上学时候就没搞明白 这个定理。看来是当时老师太挫了，呵呵。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September 18, 2011 10:28 PM">2011年9月18日 22:28</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-228426">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用tony的这条留言" onclick="return CommentQuote(&#39;comment-quote-228426&#39;,&#39;tony&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-237334" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://twitter.com/nobush" href="http://twitter.com/nobush" target="_blank" rel="nofollow">bush</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-237334">
+            <blockquote>
+<pre>引用daiyechu的发言：</pre>
+
+<p>我可不可以这么理解呢？权当拿出水果糖已经是一定的事件，也就是1。而一碗水中的水果糖占了总水果糖的60%，就可以得出概率是0.6。</p>
+
+</blockquote>
+
+<p>這個思路挺好，直接分析關鍵問題，不受分支細節影響</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="October 18, 2011  9:33 PM">2011年10月18日 21:33</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-237334">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用bush的这条留言" onclick="return CommentQuote(&#39;comment-quote-237334&#39;,&#39;bush&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-239524" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://www.cnblogs.com/zhanglong0426" href="http://www.cnblogs.com/zhanglong0426" target="_blank" rel="nofollow">Peter</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-239524">
+            <p>阮哥，你好。在第五章里 作者主要表达的意思是 互联网软件（B／S软件）是微机诞生后的最大机会 也提到了用户需要的上网终端应该越来越小巧便捷 最后发展得像手机一样（iphone）同时包括网络浏览器。这一章看的我很兴奋 呵呵&nbsp;<br>
+经过思考 我产生了如下疑问：现在智能手机很普遍了 而且浏览器也是必不可少的客户端 但是现在在智能机上并没有出现互联网软件很火的现象 反而是智能机上的客户端软件开发很吃香 像以前PC机开发桌面软件一样 是不是互联网软件只适用于PC机 而且这个机遇已经过了 因为已经产生了好多互联网巨头 gooele facebook amzon等公司 而不适用于智能机上 还是在智能机上的盛行还没来 要等客户端开发热潮退了 才开始盛行 演变规律像在PC机上发生的一样&nbsp;<br>
+现在的智能机都支持JavaScript(是不是说的太绝对了) JavaScript有这么逊吗<br>
+小弟不才 请阮哥点拨</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="November 13, 2011  5:18 PM">2011年11月13日 17:18</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-239524">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Peter的这条留言" onclick="return CommentQuote(&#39;comment-quote-239524&#39;,&#39;Peter&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-251126" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">LL</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-251126">
+            <p>两个问题讨论一下：<br>
+1、为什么这种检验的准确率高达99%，但是可信度却不到2%？应该不是与误报率有关，而是跟发病率太低有关。即便误报率为0.01，计算出的患病概率为0.049773，尽管比0.019高了3个百分点，但仍难以说明患病的概率。<br>
+2、“假阴性”的概率非常小，几乎是0.19的1/100。所以可以认为检出阴性则没有患病的可靠性很高。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="March 23, 2012  9:36 PM">2012年3月23日 21:36</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-251126">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用LL的这条留言" onclick="return CommentQuote(&#39;comment-quote-251126&#39;,&#39;LL&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-254366" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Vaporz</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-254366">
+            <p>看完以后脑子里突然冒出个感想：“数学就是用一堆显而易见的废话最后得出一个很神奇的结论。”<br>
+好像更能理解为什么有人痴迷于数学，而更多的人没有丝毫兴趣了</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="May  9, 2012  4:02 PM">2012年5月 9日 16:02</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-254366">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Vaporz的这条留言" onclick="return CommentQuote(&#39;comment-quote-254366&#39;,&#39;Vaporz&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-254367" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Vaporz</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-254367">
+            <blockquote>
+<pre>引用qq的发言：</pre>
+
+<p>可以很清楚地看到在事件B发生的情况下，事件A发生的概率就是P(A∩B)除以P(B)<br>
+这个是为什么呢,我连这个很清楚的东西都不太清楚,楼主再讲下</p>
+
+</blockquote>
+
+<p>画个文氏图，就马上明白了 ：）</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="May  9, 2012  4:04 PM">2012年5月 9日 16:04</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-254367">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Vaporz的这条留言" onclick="return CommentQuote(&#39;comment-quote-254367&#39;,&#39;Vaporz&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-254455" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">David</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-254455">
+            <p>不错，很清楚!</p>
+
+<p>不过 likelihood 教科书里通常翻做<b>似然</b></p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="May 10, 2012  6:38 PM">2012年5月10日 18:38</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-254455">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用David的这条留言" onclick="return CommentQuote(&#39;comment-quote-254455&#39;,&#39;David&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-258518" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">mm</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-258518">
+            <p>淚流滿面啊，大學時看不懂，今天終於懂了。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="July 11, 2012  2:59 PM">2012年7月11日 14:59</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-258518">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用mm的这条留言" onclick="return CommentQuote(&#39;comment-quote-258518&#39;,&#39;mm&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-260606" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">CrazyChris</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-260606">
+            <p>這裡的P(A|B)应该是真阳性吧</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August  6, 2012  4:34 PM">2012年8月 6日 16:34</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-260606">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用CrazyChris的这条留言" onclick="return CommentQuote(&#39;comment-quote-260606&#39;,&#39;CrazyChris&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-261187" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">柳旭峰</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-261187">
+            <p>没想到 如果检验呈阳性的话，那么患病的几率为9%，这么低的一个数值！</p>
+
+<p>虽然知道贝叶斯公式，但是没怎么用过。</p>
+
+<p>看来医学上检验一个药品的难度有多大！</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 13, 2012 10:30 AM">2012年8月13日 10:30</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-261187">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用柳旭峰的这条留言" onclick="return CommentQuote(&#39;comment-quote-261187&#39;,&#39;柳旭峰&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-262131" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">mufasa</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-262131">
+            <blockquote>
+<pre>引用qq的发言：</pre>
+
+<p>可以很清楚地看到在事件B发生的情况下，事件A发生的概率就是P(A∩B)除以P(B)<br>
+这个是为什么呢,我连这个很清楚的东西都不太清楚,楼主再讲下</p>
+
+</blockquote>
+
+<p>P(A|B) = A∩B/B<br>
+等号右边的分式中，分母和分子同时除以样本空间（记为S），这样就是P(A∩B)/P(B)<br>
+可以参见wiki条件概率：http://zh.wikipedia.org/wiki/%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 27, 2012  8:37 PM">2012年8月27日 20:37</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-262131">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用mufasa的这条留言" onclick="return CommentQuote(&#39;comment-quote-262131&#39;,&#39;mufasa&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-265003" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">riddle</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-265003">
+            <p>第二个问题的解释不对吧。可信度低是由于P(A)太小，即发病率太低导致的。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="October 16, 2012 11:35 PM">2012年10月16日 23:35</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-265003">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用riddle的这条留言" onclick="return CommentQuote(&#39;comment-quote-265003&#39;,&#39;riddle&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-265035" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Jim</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-265035">
+            <p>第二个例子有个关键错误，在阳性情况下确实发病的概率应为P(B|A)，而不是P(A|B)。P(A|B)的含义是发病的人被检测为阳性的概率。在文中计算过程中直接取P(B|A)为0.99也有误，应为0.95。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="October 17, 2012  6:02 PM">2012年10月17日 18:02</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-265035">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Jim的这条留言" onclick="return CommentQuote(&#39;comment-quote-265035&#39;,&#39;Jim&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-265036" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Jim</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-265036">
+            <p>Sorry, 刚才理解错了。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="October 17, 2012  6:28 PM">2012年10月17日 18:28</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-265036">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Jim的这条留言" onclick="return CommentQuote(&#39;comment-quote-265036&#39;,&#39;Jim&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-267925" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">HaHax</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-267925">
+            <blockquote>
+<pre>引用riddle的发言：</pre>
+
+<p>第二个问题的解释不对吧。可信度低是由于P(A)太小，即发病率太低导致的。</p>
+
+</blockquote>
+是发病率低和误检率高两个因子共同决定的。
+
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="January 16, 2013  3:41 PM">2013年1月16日 15:41</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-267925">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用HaHax的这条留言" onclick="return CommentQuote(&#39;comment-quote-267925&#39;,&#39;HaHax&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-268019" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">xwc</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-268019">
+            <p>怎么没人给出假阴性的答案呢？我算的是1.05E-05，不知道对不，有点绕进去了。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="January 18, 2013  7:10 PM">2013年1月18日 19:10</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-268019">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用xwc的这条留言" onclick="return CommentQuote(&#39;comment-quote-268019&#39;,&#39;xwc&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-268586" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Chang</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-268586">
+            <blockquote>
+<pre>引用xwc的发言：</pre>
+
+<p>怎么没人给出假阴性的答案呢？我算的是1.05E-05，不知道对不，有点绕进去了。</p>
+
+</blockquote>
+
+<p>我算的是0.0000105367</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="February  7, 2013 10:07 PM">2013年2月 7日 22:07</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-268586">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Chang的这条留言" onclick="return CommentQuote(&#39;comment-quote-268586&#39;,&#39;Chang&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-272229" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">kevin</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-272229">
+            <p>算对了，看来我看懂了啊</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="June 20, 2013  5:07 PM">2013年6月20日 17:07</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-272229">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用kevin的这条留言" onclick="return CommentQuote(&#39;comment-quote-272229&#39;,&#39;kevin&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-272854" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">ahuang1900</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-272854">
+            <blockquote>
+<pre>引用HaHax的发言：</pre>
+
+<p><br>
+是发病率低和误检率高两个因子共同决定的。</p>
+
+<p><br>
+</p></blockquote>
+
+<p>你说的对</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="July 27, 2013 12:43 PM">2013年7月27日 12:43</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-272854">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用ahuang1900的这条留言" onclick="return CommentQuote(&#39;comment-quote-272854&#39;,&#39;ahuang1900&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-275043" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">shredderming</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-275043">
+            <blockquote>
+<pre>引用qq的发言：</pre>
+
+<p>可以很清楚地看到在事件B发生的情况下，事件A发生的概率就是P(A∩B)除以P(B)<br>
+这个是为什么呢,我连这个很清楚的东西都不太清楚,楼主再讲下</p>
+
+</blockquote>
+
+<p>以前学的时候没想太多，现在想通了。如果用面积表示，那么P(A)=Sa/S,P(B)=Sb/S,P(AB)=Sab/S.<br>
+现在要求B发生的情况下，A发生的概率，其实就是AB同时发生的概率（B已经发生，A再发生不就是AB同时发生吗），只不过此时B发生的概率为1.<br>
+就是P(B)=Sb/S=1,此时Sb=S。AB同时发生的概率为P(AB)=Sab/S=Sab/Sb。其实这就是条件概率公式了。因为P(A|B)=P(AB)/P(B)=(Sab/S)/(Sb/S)=Sab/Sb。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September 21, 2013 12:48 AM">2013年9月21日 00:48</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-275043">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用shredderming的这条留言" onclick="return CommentQuote(&#39;comment-quote-275043&#39;,&#39;shredderming&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-275241" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">wtl</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-275241">
+            <p>1.05E-05  +1  <br>
+可见如果是阳性而被漏过的概率很低<br>
+宁可误杀 不可错过 </p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September 22, 2013 11:10 AM">2013年9月22日 11:10</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-275241">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用wtl的这条留言" onclick="return CommentQuote(&#39;comment-quote-275241&#39;,&#39;wtl&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-287739" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">èr.everfly</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-287739">
+            <p>阴性计算公式：<br>
+仍然用A表示发病，用Y表示为阴性，则<br>
+P(A|Y) = P(A)*P(Y|A) / P(Y)<br>
+       = P(A)*P(Y|A) / ( P(A)*P(Y|A) + P(A')*P(Y|A') )<br>
+       = 0.001*0.01/(0.01*0.001+0.95*0.999)<br>
+       = 1.053674161802204286346490211367e-5<br>
+其实分母中的一部分和分子是相同的。</p>
+
+<p>所以医学检测中，检测结果若为阴性，结果有误的概率非常小，因此结果为阴性的被检测者可以不去复查了。<br>
+阳性的话，根据推算可知，误报率比较高，需要进一步、最好使用其他方式复查。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="November 21, 2013 11:17 AM">2013年11月21日 11:17</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-287739">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用èr.everfly的这条留言" onclick="return CommentQuote(&#39;comment-quote-287739&#39;,&#39;èr.everfly&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-303851" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Albert Yu</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-303851">
+            <p>@Peter：</p>
+
+<p>现在的智能机（浏览器）都支持 JavaScript，这句话如何推导出 “JavaScript 有这么逊” 来的？这不是恰恰证明了 JavaScript 很强吗？</p>
+
+<p>对于你的问题，其实背后的原因蛮复杂，但是有一个原因绝对是决定性的：web app（也就是你说的互联网软件）所需要的生存环境（即智能机上的浏览器）还不足以完全替代智能机的原生环境。但是这个差距正在快速缩小，你期待的时机也在逐渐到来。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="March 21, 2014  1:00 AM">2014年3月21日 01:00</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-303851">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Albert Yu的这条留言" onclick="return CommentQuote(&#39;comment-quote-303851&#39;,&#39;Albert Yu&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-309171" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://www.leafonsword.org" href="http://www.leafonsword.org/" target="_blank" rel="nofollow">刀尖红叶</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-309171">
+            <p>通俗易懂</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="April  7, 2014  5:44 PM">2014年4月 7日 17:44</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-309171">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用刀尖红叶的这条留言" onclick="return CommentQuote(&#39;comment-quote-309171&#39;,&#39;刀尖红叶&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-328136" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">khejing</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-328136">
+            <p>计算过程中好多图片放在谷歌的服务器上，都看不到呀，阮哥能否换个地方？</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="June 11, 2014  4:51 PM">2014年6月11日 16:51</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-328136">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用khejing的这条留言" onclick="return CommentQuote(&#39;comment-quote-328136&#39;,&#39;khejing&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-329387" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">mozart0</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-329387">
+            <blockquote>
+<pre>引用daiyechu的发言：</pre>
+
+<p>我可不可以这么理解呢？权当拿出水果糖已经是一定的事件，也就是1。而一碗水中的水果糖占了总水果糖的60%，就可以得出概率是0.6。</p>
+
+</blockquote>
+
+<blockquote>
+<pre>引用bush的发言：</pre>
+
+<p></p>
+
+<p>這個思路挺好，直接分析關鍵問題，不受分支細節影響</p>
+
+</blockquote>
+
+<p>毛。试试假设A碗里有水果糖30个巧克力糖无穷个</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="June 24, 2014  1:03 AM">2014年6月24日 01:03</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-329387">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用mozart0的这条留言" onclick="return CommentQuote(&#39;comment-quote-329387&#39;,&#39;mozart0&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-335010" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Owen</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-335010">
+            <p>阮老师，你这个页面有一些图片是googleapis.com中的图片，由于最近google国内封的比较厉害，这个图片都没办打开了。能不能把这换成国内的.</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August 23, 2014  9:49 PM">2014年8月23日 21:49</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-335010">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Owen的这条留言" onclick="return CommentQuote(&#39;comment-quote-335010&#39;,&#39;Owen&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-337176" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://jiahut.github.io" href="http://jiahut.github.io/" target="_blank" rel="nofollow">jazz</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-337176">
+            <p>&gt; 在这里，如果"可能性函数"P(B|A)/P(B)&gt;1，意味着"先验概率"被增强 </p>
+
+<p>P(B|A)/P(B)&gt;1 这个可能答应1吗？P(B|A) 肯定比P(B) 小啊</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September 10, 2014  4:44 PM">2014年9月10日 16:44</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-337176">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用jazz的这条留言" onclick="return CommentQuote(&#39;comment-quote-337176&#39;,&#39;jazz&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-337217" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://jiahut.github.io" href="http://jiahut.github.io/" target="_blank" rel="nofollow">jazz</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-337217">
+            <blockquote>
+<pre>引用jazz的发言：</pre>
+
+<p>&gt; 在这里，如果"可能性函数"P(B|A)/P(B)&gt;1，意味着"先验概率"被增强 </p>
+
+<p>P(B|A)/P(B)&gt;1 这个可能答应1吗？P(B|A) 肯定比P(B) 小啊</p>
+
+</blockquote>
+
+<p>这里的P(B|A) 不能理解为 P(A) * P(B) </p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September 10, 2014  6:15 PM">2014年9月10日 18:15</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-337217">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用jazz的这条留言" onclick="return CommentQuote(&#39;comment-quote-337217&#39;,&#39;jazz&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-340031" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">wangxing</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-340031">
+            <p> 我是大陆访问的，发现大多数图片都看不到，是否因为是和谷歌有关呢，我们这里无法访问google</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September 28, 2014  3:54 PM">2014年9月28日 15:54</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-340031">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用wangxing的这条留言" onclick="return CommentQuote(&#39;comment-quote-340031&#39;,&#39;wangxing&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-340511" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">李霞</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-340511">
+            <p>图片看不见</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="October  4, 2014 12:47 AM">2014年10月 4日 00:47</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-340511">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用李霞的这条留言" onclick="return CommentQuote(&#39;comment-quote-340511&#39;,&#39;李霞&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-346197" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">zussy</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-346197">
+            <blockquote>
+<pre>引用mozart0的发言：</pre>
+
+<p></p>
+
+<p>毛。试试假设A碗里有水果糖30个巧克力糖无穷个</p>
+
+</blockquote>
+无穷个还是一样
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="December 11, 2014 10:56 PM">2014年12月11日 22:56</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-346197">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用zussy的这条留言" onclick="return CommentQuote(&#39;comment-quote-346197&#39;,&#39;zussy&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-349155" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">匿名</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-349155">
+            <blockquote>
+<pre>引用lee的发言：</pre>
+
+<p>可悲的大学，等我上完了貌似水平还不如我上高中的时候。。。</p>
+
+</blockquote>
+
+<p>至少高中的时候对概率好熟悉</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="April 17, 2015  5:07 PM">2015年4月17日 17:07</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-349155">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用匿名的这条留言" onclick="return CommentQuote(&#39;comment-quote-349155&#39;,&#39;匿名&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-349230" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">abc</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-349230">
+            <blockquote>
+<pre>引用zussy的发言：</pre>
+
+<p><br>
+无穷个还是一样</p>
+
+</blockquote>
+
+<p><br>
+显然不对，如果第一个碗是有无穷个巧克力糖，30个水果糖，如果拿到的是水果糖的话，来自第一个碗的几率接近为0，这个算一下就知道了。 直观的意义也很容易理解，反过来假设如果我们选的碗不幸是第一个，那么基本不大可能拿到水果糖，因为它都被巧克力糖淹没了，可以认为如果我们拿到的是水果糖，那么它基本必定是从第二个碗拿到的，由此得出是第一个碗的几率为0.</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="April 23, 2015  2:57 PM">2015年4月23日 14:57</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-349230">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用abc的这条留言" onclick="return CommentQuote(&#39;comment-quote-349230&#39;,&#39;abc&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-349436" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">bowman</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-349436">
+            <p>为什么大部分图片都看不了？？？？？</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="May  5, 2015  6:46 PM">2015年5月 5日 18:46</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-349436">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用bowman的这条留言" onclick="return CommentQuote(&#39;comment-quote-349436&#39;,&#39;bowman&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-351701" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">呼呼</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-351701">
+            <blockquote>
+<pre>引用colordancer的发言：</pre>
+
+<p>“请问这颗水果糖来自一号碗的概率有多大？”<br>
+和<br>
+“已知，P(H1)等于0.5，P(E|H1)为一号碗中取出水果糖的概率，等于0.75，”</p>
+
+<p>这颗水果糖来自一号碗 和 一号碗中取出水果糖<br>
+这两句话不一样吗</p>
+
+</blockquote>
+
+<p>我的理解，这颗水果糖来自一号碗的概率＝一号碗里水果糖的数量／水果糖总数量，一号碗里取出水果糖的概率＝一号碗里水果糖的数量／一号碗里糖的总数量，我的疑问是：一号碗里水果糖的数量已知，30，水果糖的总量也知道，50，30/50=0.6，跟条件概率公式算的也一样，为啥要那么麻烦的用条件概率算</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="September 15, 2015  9:36 PM">2015年9月15日 21:36</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-351701">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用呼呼的这条留言" onclick="return CommentQuote(&#39;comment-quote-351701&#39;,&#39;呼呼&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-351959" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://home" href="http://home/" target="_blank" rel="nofollow">啦啦啦啦啦</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-351959">
+            <p>感觉糖果的概率算得不太对。</p>
+
+<p>按照公式：后验概率　＝　先验概率 ｘ 调整因子<br>
+假设碗#1为H1，水果糖为E，则<br>
+计算第一次摸出水果糖时，碗为#1的概率公式可表示为：<br>
+P(H1|E)　＝　P(H1) ｘ P(E|H1)/P(E)</p>
+
+<p>P(H1)　＝　0.5<br>
+P(E|H1)　＝　0.75<br>
+无异意</p>
+
+<p>但是，P(E)等于多少？</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="October  3, 2015 10:24 AM">2015年10月 3日 10:24</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-351959">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用啦啦啦啦啦的这条留言" onclick="return CommentQuote(&#39;comment-quote-351959&#39;,&#39;啦啦啦啦啦&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-351960" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://home" href="http://home/" target="_blank" rel="nofollow">啦啦啦啦啦</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-351960">
+            <p><br>
+P(E)是取出水果糖的概率，由于两个碗中水果糖的比例不同，不能简单地用50/80来计算，<br>
+而应该通过每次取出糖果来计算概率，<br>
+假如第一次取出的是水果糖，则概率为1/1，即100%<br>
+则第一次取出糖后，是碗#1的概率<br>
+P(H1|E)　＝　0.5 ｘ 0.75/1</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="October  3, 2015 10:34 AM">2015年10月 3日 10:34</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-351960">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用啦啦啦啦啦的这条留言" onclick="return CommentQuote(&#39;comment-quote-351960&#39;,&#39;啦啦啦啦啦&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-352293" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">GoodJob</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-352293">
+            <p>讲的真好！！</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="October 21, 2015  8:16 PM">2015年10月21日 20:16</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-352293">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用GoodJob的这条留言" onclick="return CommentQuote(&#39;comment-quote-352293&#39;,&#39;GoodJob&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-353578" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://weibo.com/ajaxlogin.php?framelogin=1&amp;callback=parent.sinaSSOController.feedBackUrlCallBack" href="http://weibo.com/ajaxlogin.php?framelogin=1&amp;callback=parent.sinaSSOController.feedBackUrlCallBack" target="_blank" rel="nofollow">有风无风</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-353578">
+            <p>误报率是5%时，假阴性约为3%,即是在有病的情况下判断为阴性的概率为3%，用假阴性更合理。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="December 27, 2015 12:18 AM">2015年12月27日 00:18</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-353578">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用有风无风的这条留言" onclick="return CommentQuote(&#39;comment-quote-353578&#39;,&#39;有风无风&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-353857" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">魏志鹏</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-353857">
+            <p><a href="http://math.stackexchange.com/questions/469974/why-would-i-use-bayes-theorem-if-i-can-directly-compute-the-posterior-probabili" rel="nofollow">http://math.stackexchange.com/questions/469974/why-would-i-use-bayes-theorem-if-i-can-directly-compute-the-posterior-probabili</a></p>
+
+<p>看到这个，感觉还是有一点区别。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="January  8, 2016  9:59 AM">2016年1月 8日 09:59</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-353857">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用魏志鹏的这条留言" onclick="return CommentQuote(&#39;comment-quote-353857&#39;,&#39;魏志鹏&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-355569" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">rainbow702</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-355569">
+            <blockquote>
+<pre>引用xwc的发言：</pre>
+
+<p>怎么没人给出假阴性的答案呢？我算的是1.05E-05，不知道对不，有点绕进去了。</p>
+
+</blockquote>
+
+<p>(0.01 * 0.001) / (0.01 * 0.001 + 0.95 * 0.999) = 1.053674161802204286346490211367e-5</p>
+
+<p>我跟你算的一样</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="April 12, 2016 10:07 AM">2016年4月12日 10:07</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-355569">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用rainbow702的这条留言" onclick="return CommentQuote(&#39;comment-quote-355569&#39;,&#39;rainbow702&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-356520" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">小邦</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-356520">
+            <p>我感觉跟大环境相关。这台机器参数性能是固定的，可变的只是环境（先验）。极端地说，如果在发病率为0的环境下，机器的可信度就是0（无论误报率如何）；在发病率100%的环境下，机器的可信度就是100%（无论误报率如何）。如果把这台机器放到一个发病率50%的环境里，机器的可信度就跟准确率一致了。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="May 22, 2016 10:14 PM">2016年5月22日 22:14</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-356520">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用小邦的这条留言" onclick="return CommentQuote(&#39;comment-quote-356520&#39;,&#39;小邦&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-368379" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Gecko</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-368379">
+            <blockquote>
+<pre>引用jazz的发言：</pre>
+
+<p></p>
+
+<p>这里的P(B|A) 不能理解为 P(A) * P(B) </p>
+
+</blockquote>
+
+<p>你把1号盘的水果糖和巧克力糖个数分别改成20个和20个，与2号盘完全一样，你再算一下试试。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="November 14, 2016  8:29 PM">2016年11月14日 20:29</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-368379">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Gecko的这条留言" onclick="return CommentQuote(&#39;comment-quote-368379&#39;,&#39;Gecko&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-368475" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">cherishcn</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-368475">
+            <p>阮先生：<br>
+   其实您的思想和观点我90%以上是赞同的，科研、学历对市场来说对大部分人来说却是没多大意义。只是我想说一句：您的东西里有些东西消极了，小孩不一定能理解。他们可能会误解里面的思想观点。<br>
+   您比我稍长几岁，您经历过的，也是我正在经历的。是什么情况，我心里也清楚了。<br>
+   但对90后来说，稍显灰色了。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="November 16, 2016  8:22 AM">2016年11月16日 08:22</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-368475">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用cherishcn的这条留言" onclick="return CommentQuote(&#39;comment-quote-368475&#39;,&#39;cherishcn&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-368476" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">cherishcn</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-368476">
+            <p>前阵子仔细读了您的大作和译著，有感而发。<br>
+发表在这一贴因为我把这一页收藏了。经常来读。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="November 16, 2016  8:25 AM">2016年11月16日 08:25</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-368476">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用cherishcn的这条留言" onclick="return CommentQuote(&#39;comment-quote-368476&#39;,&#39;cherishcn&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-371620" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">cymurs</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-371620">
+            <blockquote>
+<pre>引用zhaorui的发言：</pre>
+
+<p>假阴性把我给绕进去了</p>
+
+<p>计算公式为：(0.999*0.05)/((0.05*0.999)+(0.95*0.99)) ?</p>
+
+<p>结果：0.6 ?</p>
+
+<p>请指教</p>
+
+</blockquote>
+
+<p>博主的问题是：检测出阴性，而真实情况是发病 的概率，你这0.999（不发病的概率）来这凑什么热闹？！！！<br>
+</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="January  5, 2017 11:59 AM">2017年1月 5日 11:59</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-371620">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用cymurs的这条留言" onclick="return CommentQuote(&#39;comment-quote-371620&#39;,&#39;cymurs&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-373147" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author"><a title="http://muzieryueniao.lofter.com/" href="http://muzieryueniao.lofter.com/" target="_blank" rel="nofollow">木子二月鸟</a></span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-373147">
+            <blockquote>
+<pre>引用khejing的发言：</pre>
+
+<p>计算过程中好多图片放在谷歌的服务器上，都看不到呀，阮哥能否换个地方？</p>
+
+</blockquote>
+
+<p>同样的问题，阮老师能不能把这篇里的图片更新一下啊。。。。</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="February 20, 2017 10:36 AM">2017年2月20日 10:36</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-373147">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用木子二月鸟的这条留言" onclick="return CommentQuote(&#39;comment-quote-373147&#39;,&#39;木子二月鸟&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-373851" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Alan</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-373851">
+            <p>这就是贝叶斯推断的含义。我们先预估一个"先验概率"，然后加入实验结果，看这个实验到底是增强还是削弱了"先验概率"，由此得到更接近事实的"后验概率"。</p>
+
+<p>这句话是我要找的，谢楼主</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="March  3, 2017  4:53 PM">2017年3月 3日 16:53</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-373851">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Alan的这条留言" onclick="return CommentQuote(&#39;comment-quote-373851&#39;,&#39;Alan&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-373894" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">billy</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-373894">
+            <p>假阴性的概率极低，因为检测出阳性的概率足够高。<br>
+这个说明应该保守治疗啊，看到阳性不要慌，可能是误报，看到阴性就把心放肚子里吧</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="March  4, 2017 12:31 PM">2017年3月 4日 12:31</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-373894">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用billy的这条留言" onclick="return CommentQuote(&#39;comment-quote-373894&#39;,&#39;billy&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-379135" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">Jarhf</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-379135">
+            <blockquote>
+<pre>引用木子二月鸟的发言：</pre>
+
+<p></p>
+
+<p>同样的问题，阮老师能不能把这篇里的图片更新一下啊。。。。</p>
+
+</blockquote>
+我copy到这里了，不用翻墙图片正常：
+<a href="http://www.jianshu.com/p/6685ebda3695" rel="nofollow">http://www.jianshu.com/p/6685ebda3695</a>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August  1, 2017 11:41 AM">2017年8月 1日 11:41</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-379135">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用Jarhf的这条留言" onclick="return CommentQuote(&#39;comment-quote-379135&#39;,&#39;Jarhf&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-379153" class="comment">
+    <div class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">JI</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-379153">
+            <p>谢谢！比之前看另外一本书书的时候，理解起来容易很多。图很有帮助</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="August  1, 2017  3:50 PM">2017年8月 1日 15:50</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-379153">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用JI的这条留言" onclick="return CommentQuote(&#39;comment-quote-379153&#39;,&#39;JI&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    
+        
+        <div id="comment-383029" class="comment">
+    <div id="comment-last" class="inner">
+        <div class="comment-header">
+            <div class="asset-meta">
+<p>
+                <span class="byline">
+                    
+
+                    <span class="vcard author">cowboy</span>
+
+ 说：
+                </span>
+</p>
+            </div>
+        </div>
+        <div class="comment-content" id="comment-quote-383029">
+            <p>现有一种试剂可以检验患者是否得病，它的准确率是0.99，即在患者确实得病的情况下，它有99%的可能呈现阳性。这句话是不是有问题啊？按照后面的解释，前面的意思不应该是检验患者得病的准确率是0.99吧，求解答</p>
+        </div>
+<div class="comment-footer">
+<div class="comment-footer-inner">
+<p>
+                   <abbr class="published" title="December  6, 2017  6:36 PM">2017年12月 6日 18:36</abbr>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-383029">#</a>
+ | <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#comment-text" title="引用cowboy的这条留言" onclick="return CommentQuote(&#39;comment-quote-383029&#39;,&#39;cowboy&#39;);">引用</a>
+</p>
+</div>
+</div>
+    </div>
+</div>
+        
+    </div>
+        
+    
+
+
+    
+    
+    <div class="comments-open" id="comments-open">
+        <h2 class="comments-open-header">我要发表看法</h2>
+        <div class="comments-open-content">
+
+        
+            <div id="comment-greeting"></div>
+
+            <form method="post" action="http://www.ruanyifeng.com/cgi-bin/mtos/mt-comments.cgi" name="comments_form" id="comments-form" onsubmit="return pleaseWait();">
+                <input type="hidden" name="static" value="1">
+                <input type="hidden" name="entry_id" value="1669">
+                <input type="hidden" name="__lang" value="en">
+                <input type="hidden" name="parent_id" value="" id="comment-parent-id">
+                <input type="hidden" name="armor" value="1">
+                <input type="hidden" name="preview" value="">
+                <input type="hidden" name="sid" value="">
+                <div id="comments-open-data">
+            <div id="comments-open-text">
+                    <p><label for="comment-text">您的留言
+                    （HTML标签部分可用）</label></p>
+                    <p><textarea id="comment-text" name="text" rows="10" cols="50"></textarea></p>
+                </div>
+                    <div id="comment-form-name">
+                        <p><label for="comment-author">您的大名：</label></p>
+                        <p><input id="comment-author" name="author" size="30" value="">  <span class="hint"> «-必填</span></p>
+                    </div>
+                    <div id="comment-form-email">
+                        <p><label for="comment-email">电子邮件：</label></p>
+                        <p><input id="comment-email" name="email" size="30" value="">  <span class="hint"> «-必填，不公开</span></p>
+                    </div>
+                    <div id="comment-form-url">
+                        <p><label for="comment-url">个人网址：</label></p>
+                        <p><input id="comment-url" name="url" size="30" value="">  <span class="hint"> «-我信任你，不会填写广告链接</span></p>
+                    </div>
+                    <div id="comment-form-remember-me">
+                        <p>
+                        <label for="comment-bake-cookie">记住个人信息？</label><input type="checkbox" id="comment-bake-cookie" name="bakecookie" onclick="!this.checked?forgetMe(document.comments_form):rememberMe(document.comments_form)" value="1" accesskey="r"></p>
+                    </div>
+                </div>
+                    <div id="comment-form-reply" style="display:none">
+                    <input type="checkbox" id="comment-reply" name="comment_reply" value="" onclick="mtSetCommentParentID()">
+                    <label for="comment-reply" id="comment-reply-label"></label>
+                </div>
+                <div id="comments-open-captcha"></div>
+                <div id="comments-open-footer">
+<div id="wait" style="display:none;">
+<p><strong>正在发表您的评论，请稍候</strong></p>
+<p>
+<input type="text" name="percent" size="3" style="font-family:Arial; color:black;text-align:center; border-width:medium; border-style:none;">           
+<input type="text" name="chart" size="46" style="font-family:Arial;font-weight:bolder; color:black; padding:0px; border-style:none;">
+</p>
+</div>
+
+                    <p><input type="submit" accesskey="s" name="post" id="comment-submit" value="发表">  <span class="hint"> «- 点击按钮</span></p>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+
+    
+
+
+</div>
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        <script type="text/javascript" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/prism.js"></script>
+            <div id="footer">
+<div id="footer-inner">
+   <div id="footer-content">
+   <p><a title="微博" href="http://weibo.com/ruanyf" target="_blank">微博</a> | <a title="Twitter" target="_blank" href="https://twitter.com/ruanyf">推特</a> | <a title="GitHub" target="_blank" href="https://github.com/ruanyf">GitHub</a></p>
+   <p>2017 © <a title="电子邮件" href="http://www.ruanyifeng.com/contact.html">我的邮件</a> |</p>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46829782-1', 'ruanyifeng.com');
+  ga('send', 'pageview');
+
+</script>
+
+<script type="text/javascript" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/stats.js"></script>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div id="share_button_proto" style="display:none;">
+<a class="bshareDiv" href="http://www.bshare.cn/share" style="display: block; text-decoration: none; padding: 0px; margin: 0px; font-size: 12px; height: 21px; width: 51px;"><div class="bsPromo bsPromo1"></div><div class="buzzButton bsStyle10" style="height:21px;color:#333;;background:transparent url(//static.bshare.cn/frame/images/button_custom10-zh-Orange.gif) no-repeat;text-align:center;width:51px;"></div><div style="clear:both;"></div></a>
+
+
+
+<script type="text/javascript" charset="utf-8" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/buttonLite.js"></script>
+<script type="text/javascript" charset="utf-8">
+bShare.addEntry({
+    title: document.getElementById("page-title").innerHTML,
+url:window.location.href
+});
+</script>
+</div>
+
+<script>
+document.getElementById("share_button").innerHTML=document.getElementById("share_button_proto").innerHTML;
+</script>
+
+
+
+
+
+        </div>
+    </div>
+
+<div id="bsBox" class="bsBox"><div class="bsClose">X</div><div class="bsTop"><div class="bsReturn">选择其他平台 &gt;&gt;</div><span style="margin-left:15px;">分享到</span><span class="bsPlatName"></span></div><div class="bsFrameDiv"><iframe class="bShareFrame" name="bsFrame686" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div><div id="bsMorePanel" style="display: none;"></div></div><div class="sogoutip" style="z-index: 2147483645; visibility: hidden; display: none;"></div><div class="sogoubottom" id="sougou_bottom" style="display: none;"></div><div id="ext_stophi" style="z-index: 2147483647;"><div class="extnoticebg"></div><div class="extnotice"><h2>关闭提示 <a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#" title="关闭提示" id="closenotice" class="closenotice">关闭</a></h2><p id="sogouconfirmtxt"></p>  <a id="sogouconfirm" href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#" class="extconfirm">确 认</a> <a id="sogoucancel" href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html#" class="extconfirm">取 消</a></div></div><div id="ext_overlay" class="ext_overlayBG" style="display: none; z-index: 2147483646;"></div><iframe class="sogou_sugg_feedbackquan" frameborder="0" scrolling="no" src="./贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志_files/yun6.html" style="border: none; display: none; height: 84px; width: 100%; z-index: 2147483645; background: transparent;"></iframe><div id="ads"></div><div id="bsPanelHolder"><div id="bsPanel" style="display:none;"><div class="bsTitle"><a style="float:left;height:20px;line-height:20px;font-weight:bold;" class="bsSiteLink" target="_blank" href="http://www.bshare.cn/intro">分享到...</a><a class="bsSiteLink" style="cursor:pointer;float:right;height:20px;line-height:20px;font-weight:bold;" onclick="document.getElementById(&#39;bsPanel&#39;).style.display=&#39;none&#39;;">X</a><div class="bsClear"></div></div><div class="bsClear"></div><div style="padding-left:8px;background:#fff;*height:218px;"><div style="height:47px;border-bottom:1px #ccc solid;padding:4px 0 4px 16px;margin-right:8px;_padding-left:12px;"><div class="bsRlogo" onmouseover="javascript:this.className=&#39;bsRlogoSel&#39;" onmouseout="javascript:this.className=&#39;bsRlogo&#39;"><a href="javascript:;" onclick="javascript:bShare.share(event,&#39;facebook&#39;);return false;" style="text-decoration:none;line-height:120%;"><div style="cursor:pointer;width:24px;height:24px;margin:0 18px 2px;background:url(//static.bshare.cn/frame/images//logos/m2/facebook.gif) no-repeat;"></div><div style="cursor:pointer;text-align:center;width:60px;height:16px !important;overflow:hidden;color:inherit;white-space:nowrap;line-height:120% !important;">Facebook</div></a></div><div class="bsRlogo" onmouseover="javascript:this.className=&#39;bsRlogoSel&#39;" onmouseout="javascript:this.className=&#39;bsRlogo&#39;"><a href="javascript:;" onclick="javascript:bShare.share(event,&#39;twitter&#39;);return false;" style="text-decoration:none;line-height:120%;"><div style="cursor:pointer;width:24px;height:24px;margin:0 18px 2px;background:url(//static.bshare.cn/frame/images//logos/m2/twitter.gif) no-repeat;"></div><div style="cursor:pointer;text-align:center;width:60px;height:16px !important;overflow:hidden;color:inherit;white-space:nowrap;line-height:120% !important;">Twitter</div></a></div><div class="bsRlogo" onmouseover="javascript:this.className=&#39;bsRlogoSel&#39;" onmouseout="javascript:this.className=&#39;bsRlogo&#39;"><a href="javascript:;" onclick="javascript:bShare.share(event,&#39;sinaminiblog&#39;);return false;" style="text-decoration:none;line-height:120%;"><div style="cursor:pointer;width:24px;height:24px;margin:0 18px 2px;background:url(//static.bshare.cn/frame/images//logos/m2/sinaminiblog.gif) no-repeat;"></div><div style="cursor:pointer;text-align:center;width:60px;height:16px !important;overflow:hidden;color:inherit;white-space:nowrap;line-height:120% !important;">新浪微博</div></a></div></div><div class="bsLogoLink"><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="微信" onclick="javascript:bShare.share(event,&#39;weixin&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//logos/s4/weixin.png) no-repeat;">微信</a></div><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="腾讯微博" onclick="javascript:bShare.share(event,&#39;qqmb&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//slogos_sprite8.png) no-repeat 0 -1512px;">腾讯微博</a></div><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="豆瓣网" onclick="javascript:bShare.share(event,&#39;douban&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//slogos_sprite8.png) no-repeat 0 -540px;">豆瓣网</a></div><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="饭否" onclick="javascript:bShare.share(event,&#39;fanfou&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//slogos_sprite8.png) no-repeat 0 -666px;">饭否</a></div><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="雪球" onclick="javascript:bShare.share(event,&#39;xueqiu&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//logos/s4/xueqiu.png) no-repeat;">雪球</a></div><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="电子邮件" onclick="javascript:bShare.share(event,&#39;email&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//slogos_sprite8.png) no-repeat 0 -612px;">电子邮件</a></div></div><div class="bsLogoLink"><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="Google+" onclick="javascript:bShare.share(event,&#39;gplus&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//logos/s4/gplus.png) no-repeat;">Google+</a></div><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="QQ空间" onclick="javascript:bShare.share(event,&#39;qzone&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//slogos_sprite8.png) no-repeat 0 -1566px;">QQ空间</a></div><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="QQ好友" onclick="javascript:bShare.share(event,&#39;qqim&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//logos/s4/qqim.png) no-repeat;">QQ好友</a></div><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="Instapaper" onclick="javascript:bShare.share(event,&#39;instapaper&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//slogos_sprite8.png) no-repeat 0 -954px;">Instapaper</a></div><div class="bsLogo" onmouseover="javascript:this.className=&#39;bsLogoSel&#39;" onmouseout="javascript:this.className=&#39;bsLogo&#39;"><a href="javascript:;" title="美味书签" onclick="javascript:bShare.share(event,&#39;delicious&#39;);return false;" style="background:url(//static.bshare.cn/frame/images//slogos_sprite8.png) no-repeat 0 -432px;">美味书签</a></div></div><div class="bsClear"></div></div><div style="height:20px;line-height:20px;padding:0 8px;border-top:1px solid #e8e8e8;color:#666;background:#f2f2f2;"><div class="buzzButton" style="float:left;">更多平台... <font style="font-weight:normal;">(133)</font></div><div id="bsPower" style="float:right;text-align:right;overflow:hidden;height:100%;"><a class="bsSiteLink" style="font-size:10px;vertical-align:text-bottom;line-height:24px;cursor:pointer;" href="http://www.bshare.cn/" target="_blank"><span style="font-size:10px;vertical-align:text-bottom;"><span style="color:#f60;">b</span>Share</span></a></div></div></div></div></body></html>
