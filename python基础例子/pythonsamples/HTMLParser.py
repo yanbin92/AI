@@ -93,3 +93,73 @@ fetchWebData('https://www.python.org/events/python-events/')
 # 练习
 # 找一个网页，例如https://www.python.org/events/python-events/，用浏览器查看源码并复制，然后尝试解析一下HTML，输出Python官网发布的会议时间、名称和地点。
 # request.urlopen('http://www.python.org/')
+
+html_doc = """
+<html><head><title>The Dormouse's story</title></head>
+<body>
+<p class="title"><b>The Dormouse's story</b></p>
+
+<p class="story">Once upon a time there were three little sisters; and their names were
+<a href="http://example.com/elsie" class="sister" id="link1">Elsie</a>,
+<a href="http://example.com/lacie" class="sister" id="link2">Lacie</a> and
+<a href="http://example.com/tillie" class="sister" id="link3">Tillie</a>;
+and they lived at the bottom of a well.</p>
+
+<p class="story">...</p>
+
+<head>
+    ...
+    <style>
+    .jan {
+        background-color: yellow;
+    }
+    ...
+    .month {
+        color: red;
+    }
+    </style>
+</head>
+
+<body>
+...
+<ul>
+    <li class="month">一月</li>
+    <ul class="jan">
+        <li>一月一号</li>
+        <li>一月二号</li>
+        <li>一月三号</li>
+    </ul>
+    ...
+</ul>
+</body>
+"""
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(html_doc, features='lxml')
+# print(soup.prettify())
+print(soup.p)
+all_href = soup.find_all('a')
+all_href = [l['href'] for l in all_href]
+print('\n', all_href)
+
+
+jan = soup.find('ul', {"class": 'jan'})
+d_jan = jan.find_all('li')              # use jan as a parent
+for d in d_jan:
+    print(d.get_text())
+
+"""
+一月一号
+一月二号
+一月三号
+"""
+import re
+
+
+html = requests.get("https://morvanzhou.github.io/static/scraping/table.html")
+soup = BeautifulSoup(html.text, features='lxml')
+print(soup.prettify())
+img_links = soup.find_all("img", {"src": re.compile('.*?\.jpg')})
+for link in img_links:
+    print(link['src'])
+
+
